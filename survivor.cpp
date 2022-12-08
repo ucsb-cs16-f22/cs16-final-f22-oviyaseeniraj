@@ -42,26 +42,22 @@ string votedOut(Parchment *validVotes)
 }
 Parchment *tallyTheVote(Parchment *votingUrn, HiddenImmunityIdol *idolUsed)
 {
+
      if (votingUrn == nullptr)
      {
-          return nullptr;
+          return votingUrn;
      }
-     // need to write edge case for if first or last node of voting urn has to be deleted
 
      if (votingUrn->vote == idolUsed->target)
      {
-          Parchment *head = votingUrn;
+          Parchment *tmp = votingUrn;
           votingUrn = votingUrn->next;
-          delete head;
+          delete tmp;
+          return tallyTheVote(votingUrn, idolUsed);
      }
-
-     // else if (votingUrn->next->vote == idolUsed->target)
-     // {
-     //      Parchment *toRemove = votingUrn->next;
-     //      votingUrn->next == votingUrn->next->next;
-     //      delete toRemove;
-     // }
-
-     tallyTheVote(votingUrn->next, idolUsed);
-     return votingUrn;
+     else
+     {
+          votingUrn->next = tallyTheVote(votingUrn->next, idolUsed);
+          return votingUrn;
+     }
 }
